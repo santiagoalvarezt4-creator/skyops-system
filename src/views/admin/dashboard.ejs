@@ -1,0 +1,85 @@
+<%- include('../partials/head', { description: 'Panel de administración de AeroGestión: usuarios, flota, bases y vuelos.' }) %>
+<%
+  const statusClass = { ACTIVO: 'status-ok', INACTIVO: 'status-warn', BLOQUEADO: 'status-bad' };
+  const cards = [
+    { icon: 'bi-people-fill', tone: '', value: stats.usuarios, label: 'Usuarios registrados' },
+    { icon: 'bi-airplane-engines-fill', tone: 'emerald', value: `${stats.aviones_operativos}/${stats.aviones}`, label: 'Aeronaves operativas' },
+    { icon: 'bi-calendar2-week-fill', tone: 'amber', value: stats.vuelos_programados, label: 'Vuelos programados' },
+    { icon: 'bi-buildings-fill', tone: 'rose', value: stats.bases, label: 'Bases de operación' },
+  ];
+%>
+<body>
+  <div class="app-shell">
+    <%- include('../partials/navbar') %>
+
+    <main class="container pb-5">
+      <header class="page-header">
+        <span class="card-eyebrow"><span class="dot"></span> Centro de mando · Administración</span>
+        <h1>Hola, <%= currentUser.nombres %> 👋</h1>
+        <p class="text-soft mb-0">Este es el estado general de la operación en este momento.</p>
+      </header>
+
+      <section class="row g-4 mb-4 stagger" aria-label="Indicadores">
+        <% cards.forEach(c => { %>
+          <div class="col-sm-6 col-xl-3">
+            <article class="panel stat-card">
+              <div class="stat-icon <%= c.tone %>"><i class="bi <%= c.icon %>"></i></div>
+              <div class="stat-value"><%= c.value %></div>
+              <div class="stat-label"><%= c.label %></div>
+            </article>
+          </div>
+        <% }) %>
+      </section>
+
+      <section class="panel" aria-labelledby="recent-users-title">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div>
+            <h2 id="recent-users-title" class="h5 mb-1">Usuarios recientes</h2>
+            <p class="text-muted-aero small mb-0">Últimas cuentas creadas en la plataforma.</p>
+          </div>
+          <span class="role-badge"><i class="bi bi-shield-check me-1"></i>Solo administradores</span>
+        </div>
+
+        <% if (usuarios.length) { %>
+          <div class="table-responsive">
+            <table class="table table-aero table-hover">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Base</th>
+                  <th>Estado</th>
+                  <th class="text-end">Creado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% usuarios.forEach(u => { %>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="avatar" style="width:2.2rem;height:2.2rem;font-size:.85rem"><%= u.nombres.charAt(0) %></div>
+                        <div class="lh-sm">
+                          <div class="fw-semibold"><%= u.nombres %> <%= u.apellidos %></div>
+                          <small class="text-muted-aero"><%= u.email %></small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="role-badge"><%= u.rol %></span></td>
+                    <td class="font-display fw-semibold"><%= u.codigo_iata %></td>
+                    <td><span class="status <%= statusClass[u.estado] || 'status-info' %>"><%= u.estado %></span></td>
+                    <td class="text-end text-soft"><%= u.creado %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty-state"><i class="bi bi-people"></i>Aún no hay usuarios registrados.</div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <%- include('../partials/scripts') %>
+</body>
+</html>

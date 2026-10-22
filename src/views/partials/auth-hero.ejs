@@ -1,0 +1,39 @@
+<aside class="auth-hero d-none d-lg-flex" aria-hidden="true">
+  <a href="/login" class="brand position-relative" tabindex="-1">
+    <span class="brand-mark"><i class="bi bi-airplane-fill"></i></span>
+    <span>Aero<em>Gestión</em></span>
+  </a>
+
+  <div class="radar">
+    <div class="radar-sweep"></div>
+    <span class="blip b1"></span>
+    <span class="blip b2"></span>
+    <span class="blip b3"></span>
+  </div>
+
+  <div class="position-relative" style="max-width: 34rem;">
+    <p class="card-eyebrow mb-3"><span class="dot"></span> Centro de control operativo</p>
+    <h2 class="hero-title">Tu operación aérea, <span class="gradient">en piloto automático.</span></h2>
+    <p class="hero-copy">Gestiona flota, pilotos, tripulación y vuelos desde una sola cabina de mando, con acceso seguro según tu perfil.</p>
+  </div>
+
+  <svg class="flight-path" viewBox="0 0 600 220" preserveAspectRatio="xMidYMid meet">
+    <path id="route" class="route" d="M40,180 C170,30 400,20 560,140" />
+    <circle class="node" cx="40" cy="180" r="6" />
+    <circle class="node" cx="560" cy="140" r="6" />
+    <text x="22" y="208">BOG</text>
+    <text x="544" y="168">MDE</text>
+    <g class="plane">
+      <path transform="scale(1.6) rotate(90) translate(-8 -8)" d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849"/>
+      <animateMotion dur="9s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.45 0 0.55 1">
+        <mpath href="#route" />
+      </animateMotion>
+    </g>
+  </svg>
+
+  <div class="hero-features">
+    <div class="hero-feature"><i class="bi bi-shield-lock"></i><strong>Acceso seguro</strong><small>Cifrado bcrypt y sesiones</small></div>
+    <div class="hero-feature"><i class="bi bi-people"></i><strong>Por perfiles</strong><small>Admin, pilotos y tripulación</small></div>
+    <div class="hero-feature"><i class="bi bi-broadcast"></i><strong>Tiempo real</strong><small>Flota y vuelos al día</small></div>
+  </div>
+</aside>

@@ -1,0 +1,15 @@
+<%- include('../partials/head') %>
+<body>
+  <main class="app-shell d-flex align-items-center justify-content-center text-center px-3">
+    <section class="glass-card" aria-labelledby="error-title">
+      <div class="error-code"><%= code %></div>
+      <h1 id="error-title" class="card-title mt-2"><%= title %></h1>
+      <p class="card-subtitle"><%= message %></p>
+      <a href="/" id="btn-error-home" class="btn btn-aero w-100 d-inline-flex align-items-center justify-content-center">
+        <i class="bi bi-house-door me-2"></i>Volver a la base
+      </a>
+    </section>
+  </main>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

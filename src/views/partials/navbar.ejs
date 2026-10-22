@@ -1,0 +1,22 @@
+<header class="navbar-aero">
+  <nav class="container d-flex align-items-center justify-content-between" aria-label="Principal">
+    <a href="/" class="brand">
+      <span class="brand-mark"><i class="bi bi-airplane-fill"></i></span>
+      <span>Aero<em>Gestión</em></span>
+    </a>
+    <div class="d-flex align-items-center gap-3">
+      <div class="user-chip">
+        <div class="avatar"><%= currentUser.nombres.charAt(0).toUpperCase() %></div>
+        <div class="d-none d-sm-block lh-sm">
+          <div class="fw-semibold"><%= currentUser.nombre %></div>
+          <span class="role-badge"><%= currentUser.rol %></span>
+        </div>
+      </div>
+      <form action="/logout" method="POST" data-confirm-logout>
+        <button type="submit" id="btn-logout" class="btn btn-ghost btn-sm px-3 py-2">
+          <i class="bi bi-box-arrow-right me-1"></i><span class="d-none d-md-inline">Salir</span>
+        </button>
+      </form>
+    </div>
+  </nav>
+</header>
