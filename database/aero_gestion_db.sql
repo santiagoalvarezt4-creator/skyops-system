@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-11-2026 a las 20:59:50
+-- Tiempo de generación: 13-11-2026 a las 23:03:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -43,8 +43,8 @@ CREATE TABLE `aviones` (
   `id_avion` int(11) NOT NULL,
   `matricula` varchar(20) NOT NULL,
   `modelo` varchar(50) NOT NULL,
-  `capacidad_pasajeros` int(11) NOT NULL CHECK (`capacidad_pasajeros` > 0),
-  `id_base_mantenimiento` int(11) NOT NULL,
+  `capacidad_asientos` int(11) NOT NULL,
+  `id_base_asignada` int(11) NOT NULL,
   `estado` enum('OPERATIVO','EN_MANTENIMIENTO','FUERA_SERVICIO') DEFAULT 'OPERATIVO'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -52,9 +52,9 @@ CREATE TABLE `aviones` (
 -- Volcado de datos para la tabla `aviones`
 --
 
-INSERT INTO `aviones` (`id_avion`, `matricula`, `modelo`, `capacidad_pasajeros`, `id_base_mantenimiento`, `estado`) VALUES
+INSERT INTO `aviones` (`id_avion`, `matricula`, `modelo`, `capacidad_asientos`, `id_base_asignada`, `estado`) VALUES
 (1, 'HK-5340', 'Boeing 737-800', 189, 1, 'OPERATIVO'),
-(2, 'HK-4982', 'Airbus A320neo', 180, 2, 'OPERATIVO');
+(2, 'HK-4982', 'Airbus A320neo', 180, 5, 'OPERATIVO');
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,8 @@ CREATE TABLE `bases` (
 INSERT INTO `bases` (`id_base`, `codigo_iata`, `nombre_ciudad`, `nombre_aeropuerto`) VALUES
 (1, 'BOG', 'Bogotá', 'Aeropuerto Internacional El Dorado'),
 (2, 'MDE', 'Medellín', 'Aeropuerto Internacional José María Córdova'),
-(3, 'CLO', 'Cali', 'Aeropuerto Internacional Alfonso Bonilla Aragón');
+(3, 'CLO', 'Cali', 'Aeropuerto Internacional Alfonso Bonilla Aragón'),
+(5, 'CTG', 'Cartagena', 'Aeropuerto Rafael Núñez');
 
 -- --------------------------------------------------------
 
@@ -100,7 +101,8 @@ CREATE TABLE `personas` (
 
 INSERT INTO `personas` (`id_persona`, `cedula_identidad`, `nombres`, `apellidos`, `telefono`, `direccion`, `id_base_regreso`) VALUES
 (1, '100100100', 'Santiago', 'Administrador', '3001234567', 'Calle 26 # 103-09', 1),
-(2, '200200200', 'Carlos', 'Piloto Gómez', '3109876543', 'Av. El Dorado # 80', 1);
+(2, '200200200', 'Carlos', 'Piloto Gómez', '3109876543', 'Av. El Dorado # 80', 1),
+(7, '1023242354', 'Santiago', 'Alvarez Torres', '3214308446', 'Dg 3 # 6-50', 1);
 
 -- --------------------------------------------------------
 
@@ -178,7 +180,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `id_persona`, `email`, `password_hash`, `id_rol`, `token_recuperacion`, `expiracion_token`, `estado`, `created_at`) VALUES
 (1, 1, 'admin@skyops.com', '$2b$10$riL03fgcS7M5wJ/Qos6RKOcshWjLJW0CJ46PcgVjmKTtYXEdrLMt2', 1, NULL, NULL, 'ACTIVO', '2026-10-22 15:09:29'),
-(2, 2, 'piloto@skyops.com', '$2b$10$riL03fgcS7M5wJ/Qos6RKOcshWjLJW0CJ46PcgVjmKTtYXEdrLMt2', 2, NULL, NULL, 'ACTIVO', '2026-10-22 15:09:29');
+(2, 2, 'piloto@skyops.com', '$2b$10$riL03fgcS7M5wJ/Qos6RKOcshWjLJW0CJ46PcgVjmKTtYXEdrLMt2', 2, NULL, NULL, 'ACTIVO', '2026-10-22 15:09:29'),
+(7, 7, 'santiagoalvarezt4@gmail.com', '$2b$10$5vyFHImTCdfk3XEMEYfa/.TloR8wwCrd7fv1X8s17moi4IhBvurZe', 2, '75a1e33d0cb0d53f1485b2b8709544df9fe823e30ef825c25b0f9fbff843a67f', '2026-11-13 16:11:13', 'ACTIVO', '2026-11-13 20:04:40');
 
 -- --------------------------------------------------------
 
@@ -198,7 +201,7 @@ CREATE TABLE `vuelos` (
   `id_avion` int(11) NOT NULL,
   `id_piloto` int(11) NOT NULL,
   `estado` enum('PROGRAMADO','EN_VUELO','COMPLETADO','CANCELADO') DEFAULT 'PROGRAMADO'
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas
@@ -217,7 +220,7 @@ ALTER TABLE `asignacion_tripulacion`
 ALTER TABLE `aviones`
   ADD PRIMARY KEY (`id_avion`),
   ADD UNIQUE KEY `matricula` (`matricula`),
-  ADD KEY `id_base_mantenimiento` (`id_base_mantenimiento`);
+  ADD KEY `id_base_mantenimiento` (`id_base_asignada`);
 
 --
 -- Indices de la tabla `bases`
@@ -281,19 +284,19 @@ ALTER TABLE `vuelos`
 -- AUTO_INCREMENT de la tabla `aviones`
 --
 ALTER TABLE `aviones`
-  MODIFY `id_avion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_avion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `bases`
 --
 ALTER TABLE `bases`
-  MODIFY `id_base` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_base` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -305,7 +308,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `vuelos`
@@ -328,7 +331,7 @@ ALTER TABLE `asignacion_tripulacion`
 -- Filtros para la tabla `aviones`
 --
 ALTER TABLE `aviones`
-  ADD CONSTRAINT `aviones_ibfk_1` FOREIGN KEY (`id_base_mantenimiento`) REFERENCES `bases` (`id_base`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `aviones_ibfk_1` FOREIGN KEY (`id_base_asignada`) REFERENCES `bases` (`id_base`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `personas`
